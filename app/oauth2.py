@@ -37,7 +37,7 @@ def verify_access_token(token:str, credentials_exception):
 
 # function that require user to be logged in, if logged in will not return someting
 # if POST method have this func need to go (POST login User)'s Body/form-data to login, then POST Create Post)'s Headers -> key:Authorization, value: Bearer +(the token code eyJh.....)
-#if CRUD without logged in CRUD, it will show "detail": "Not authenticated", if enter expired or wrong token will show detail='Could not validate credentials'
+#if CRUD without logged in, it will show "detail": "Not authenticated", if enter expired or wrong token will show detail='Could not validate credentials'
 def get_current_user(token:str = Depends(oauth2_scheme) , db: Session = Depends(database.get_db)):
     credentials_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                          detail='Could not validate credentials',

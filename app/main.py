@@ -8,12 +8,13 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 print(settings.database_username)
+
 #to connect the database.py file , dont need sql to query
-#models.Base.metadata.create_all(bind=engine)
+#models.Base.metadata.create_all(bind=engine)    & Base.metadata.create_all(bind=engine)  are the same as both inherit the sam instance 'Base'; if Base1.metadata.create_all(bind=engine) & models.Base2.metadata.create_all(bind=engine) will get different OP
 
 app = FastAPI()
 
-origins=["*"]   #* means everything  so here is mean avery website , if only want a specific web, for example only google.com then just put "https://google.com"
+origins=["*"]   #* means everything  so here is mean every website , if only want a specific web, for example only google.com then just put "https://google.com"
 
 app.add_middleware(
     CORSMiddleware,

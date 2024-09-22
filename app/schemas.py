@@ -77,7 +77,7 @@ class TokenData(BaseModel):
 class Vote(BaseModel):
     post_id: int
     dir: conint(le=1)
-    #dir here means like or dislike ,(le=1) means only allow number <= 1, not include -ve num, so only(!,0)
+    #dir here means like or dislike ,(le=1) means only allow number <= 1, not include -ve num, so only(1,0)
 
 
 

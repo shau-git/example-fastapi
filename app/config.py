@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings
 
 
 
-class Settings(BaseSettings):   # environment variables, so that e dont have to exposed our password or secret key
+class Settings(BaseSettings):   # environment variables, so that we dont have to exposed our password or secret key
     database_hostname: str
     database_port: str
     database_password: str #= 'localhost'    # = 'localhost' just assign it a default value

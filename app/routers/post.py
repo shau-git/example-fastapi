@@ -29,10 +29,10 @@ def get_posts(db: Session = Depends(get_db), current_user: int = Depends(oauth2.
     #posts_1 = db.query(models.Post).filter(models.Post.title.contains(search)).limit(limit).offset(skip).all()      #filter(models.Post.owner_id==current_user.id).all()      #.all()  means grab/return all the (relevant) query
                             #the search is it will find the input and filter if the input in the title({{URL}}posts?search=po)  wil return("post4","po5","posss6")
                                 #.filter(models.Post.id==current_user.id) means only the owner of the post can read the post,make ur post private
-   
+
     posts = db.query(models.Post, func.count(models.Vote.post_id).label("votes")).join(
         models.Vote,models.Post.id ==models.Vote.post_id, isouter=True).group_by(models.Post.id).filter(
-                  models.Post.title.contains(search)).limit(limit).offset(skip).all()
+                  models.Post.title.contains(search)).limit(limit).offset(skip).all()#isouter=True ensures that all posts are included in the result, even if there are no corresponding votes for some posts.
                     #join by default is left join  , SELECT posts.*,COUNT(votes.user_id) AS votes FROM posts LEFT JOIN votes ON posts.id = votes.post_id GROUP BY posts.id ;
     return posts
 #both are the same ,above and below
@@ -52,8 +52,8 @@ def get_posts(db: Session = Depends(get_db), current_user: int = Depends(oauth2.
 @router.post('/',status_code=status.HTTP_201_CREATED , response_model=schemas.Post) 
 def create_posts(post:schemas.PostCreate, db: Session = Depends(get_db) , current_user: int = Depends(oauth2.get_current_user)):
    # new_post=models.Post(title=post.title, content=post.content, published=post.published)   #models is file name models.py
-    print(current_user.id)
-    print(current_user.email)      
+    print(current_user.id) 
+    print(current_user.email)      #>>>>>>>>>>>>>>>>>>>>>>
     new_post = models.Post(owner_id=current_user.id ,**post.dict())  #replace the title=post.title...... this thing automatically unpack all the attributes, dont have to key in 1by1
                                    #owner_id=current_user.id ==set/add the owner_id to current_user.id because request format (schemas.PostCreate) dont have owner_id but response format have , so do tat can solve the issue
     db.add(new_post)          #add the new post to database
@@ -123,7 +123,7 @@ def delete_post(id:int, db: Session = Depends(get_db), current_user: int = Depen
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail = f'post with {id} does not exist') 
     
-    if post.owner_id !=  current_user.id:
+    if post.owner_id !=  current_user.id:      #delete the post not own by the user will raise this 
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail = f'Not authorized to perform action') 
     post_query.delete(synchronize_session=False)

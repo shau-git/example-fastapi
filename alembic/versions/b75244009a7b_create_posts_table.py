@@ -10,7 +10,7 @@ from typing import Sequence, Union
 from alembic import op
 import sqlalchemy as sa
 
-
+#because once you wanna edit the database have to delete the database, this approach can no need to delete entire database when updating col etc
 # revision identifiers, used by Alembic.
 revision: str = 'b75244009a7b'
 down_revision: Union[str, None] = None
